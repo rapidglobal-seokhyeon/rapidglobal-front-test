@@ -1,0 +1,36 @@
+.button {
+  padding: 8px 12px;
+  border-radius: 4px;
+  outline: none;
+  border: none;
+}
+
+.button:hover {
+  opacity: 0.9;
+  cursor: pointer;
+}
+
+.danger {
+  background-color: red;
+  color: #fff;
+}
+
+.success {
+  background-color: green;
+  color: #fff;
+}
+
+.primary {
+  background-color: blue;
+  color: #fff;
+}
+
+.dark {
+  background-color: black;
+  color: #fff;
+}
+
+.light {
+  background-color: #fff;
+  color: black;
+}

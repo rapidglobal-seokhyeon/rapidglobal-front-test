@@ -1,0 +1,13 @@
+.content_box {
+}
+
+.content_info {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.image_box {
+  position: relative;
+}
