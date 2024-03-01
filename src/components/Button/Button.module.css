@@ -5,6 +5,10 @@
   border: none;
 }
 
+.button:disabled {
+  background-color: rgb(221, 219, 219);
+}
+
 .button:hover {
   opacity: 0.9;
   cursor: pointer;

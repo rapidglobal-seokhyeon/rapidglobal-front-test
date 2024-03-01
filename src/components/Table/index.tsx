@@ -1,4 +1,3 @@
-import { usePopUpStore } from "@/stores/popup";
 import { TableDataKeyValue } from "@/types";
 import { Product } from "@dto/product.model.dto";
 import { MouseEvent } from "react";
@@ -10,8 +9,6 @@ interface TableProps {
 }
 
 export const Table = ({ header, body, onClickRow }: TableProps) => {
-  const { handleToggle } = usePopUpStore();
-
   return (
     <table>
       <thead>
@@ -23,16 +20,10 @@ export const Table = ({ header, body, onClickRow }: TableProps) => {
       </thead>
       <tbody>
         {body.map(({ id, price, title, uploadedAt, viewCount }) => (
-          <tr
-            key={id}
-            onClick={(e) => {
-              onClickRow && onClickRow(e, id);
-              handleToggle();
-            }}
-          >
+          <tr key={id} onClick={(e) => onClickRow && onClickRow(e, id)}>
             <td>{title}</td>
             <td>{new Date(uploadedAt).toLocaleString()}</td>
-            <td>{price}</td>
+            <td>{price.toLocaleString()}</td>
             <td>{viewCount}</td>
           </tr>
         ))}

@@ -1,6 +1,3 @@
-.content_box {
-}
-
 .content_info {
   display: flex;
   justify-content: flex-end;
@@ -9,5 +6,45 @@
 }
 
 .image_box {
+  display: flex;
+  gap: 1rem;
+}
+
+.image_layout {
   position: relative;
+  aspect-ratio: 1;
+  width: 100%;
+}
+
+.image_layout:hover .thumbnail_overlay {
+  /* 확대 이미지 노출 */
+  display: block;
+}
+
+.right {
+  /* 확대 이미지 위치 */
+  right: 0;
+  left: unset;
+}
+
+.left {
+  /* 확대 이미지 위치 */
+  right: unset;
+  left: 0;
+}
+
+.thumbnail_overlay {
+  /* 확대 이미지 스타일 */
+  display: none;
+  position: absolute;
+  top: 50%;
+  width: 50vw;
+  aspect-ratio: 1;
+  border-radius: 8px;
+  z-index: 99;
+}
+
+.thumbnail {
+  border-radius: 4px;
+  cursor: pointer;
 }

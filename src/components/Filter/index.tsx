@@ -19,10 +19,12 @@ export const Filter = ({ filter, loading }: FilterProps) => {
   const parseJSON = (searchParams && JSON.parse(searchParams)) || "";
 
   const initFilter = (): FilterKeyValue[] => {
+    // 쿼리스트링에 담긴 필터 값이 없을 때
     if (!parseJSON.length) {
       return filter.map((item) => ({ ...item, sortType: "asc" }));
     }
 
+    // 쿼리스트링에 담긴 필터이 있다면 그 값으로 세팅
     return filter.map((item) => {
       const find: { [key in string]: SortType } = parseJSON.find(
         (parsedItem: { [key in string]: SortType }) =>
@@ -69,7 +71,7 @@ export const Filter = ({ filter, loading }: FilterProps) => {
       {initFilterMemo.map(({ key, label, sortType }) => {
         return (
           <div key={key}>
-            <span>{label}</span>
+            <p>{label}</p>
             <button disabled={loading} onClick={onClick(key, sortType)}>
               {sortType === "asc" && <span id={sortType}>오름차순</span>}
               {sortType === "desc" && <span id={sortType}>내림차순</span>}
@@ -77,6 +79,18 @@ export const Filter = ({ filter, loading }: FilterProps) => {
           </div>
         );
       })}
+
+      <button
+        onClick={() => {
+          const payload = {
+            ...pageQueryParams,
+            sortList: "[]",
+          };
+          router.push(makeQueryString(payload), undefined, { shallow: true });
+        }}
+      >
+        초기화
+      </button>
     </div>
   );
 };

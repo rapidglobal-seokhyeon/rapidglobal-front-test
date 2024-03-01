@@ -1,53 +1,74 @@
 import { Button } from "@/components/Button";
 import { PopUp } from "@/components/PopUp";
-import { Product } from "@dto/product.model.dto";
 
-import styles from "./detail.module.css";
+import styles from "./Detail.module.css";
+
+import { clsx } from "clsx";
+import { useGetProductDetail } from "@/hooks/useGetProductDetailHooks";
+import { Img } from "@/components/Image";
 
 interface ProductListDetailPopUpProps {
-  data: Product[];
+  productId: number;
 }
 
 export const ProductListDetailPopUp = ({
-  data,
+  productId,
 }: ProductListDetailPopUpProps) => {
+  const { data, isLoading } = useGetProductDetail(productId);
+
+  if (!data || !data.product) return <div>loading...</div>;
+
+  const { price, thumbnailUrls, title, uploadedAt, viewCount } = data.product;
+
   return (
     <PopUp>
       <PopUp.Header>상품 정보</PopUp.Header>
       <PopUp.Body>
-        {data?.map(
-          ({ id, price, thumbnailUrls, title, uploadedAt, viewCount }) => {
+        <div className={styles.content_box}>
+          <p>{title}</p>
+          <div className={styles.content_info}>
+            <p>{new Date(uploadedAt).toLocaleString()}</p>
+            <p>조회수: {viewCount}</p>
+          </div>
+          <div className={styles.content_info}>
+            <p>가격: {price.toLocaleString()}원</p>
+          </div>
+        </div>
+        <div className={styles.image_box}>
+          {thumbnailUrls.map((image, idx) => {
+            // 확대 이미지 위치 계산
+            const left = idx <= Math.floor(thumbnailUrls.length / 2);
+            const right = idx > Math.floor(thumbnailUrls.length / 2);
+
             return (
-              <div key={id}>
-                <div className={styles.content_box}>
-                  <p>{title}</p>
-                  <div className={styles.content_info}>
-                    <p>{new Date(uploadedAt).toLocaleString()}</p>
-                    <p>조회수: {viewCount}</p>
-                  </div>
-                  <div className={styles.content_info}>
-                    <p>가격: {price}원</p>
+              <div className={styles.image_layout} key={idx}>
+                <Img
+                  src={image}
+                  className={styles.thumbnail}
+                  sizes="(min-width: 380px) 100vw"
+                />
+
+                <div
+                  className={clsx(styles.thumbnail_overlay, {
+                    [styles.left]: left,
+                    [styles.right]: right,
+                  })}
+                >
+                  <div className={styles.image_layout}>
+                    <Img
+                      src={image}
+                      className={styles.thumbnail}
+                      sizes="(min-width: 380px) 100vw"
+                    />
                   </div>
                 </div>
-                {/* <div className={styles.image_box}>
-                    {thumbnailUrls.map((image, idx) => (
-                      <Image
-                        key={idx}
-                        src={image}
-                        alt="image"
-                        // width={48}
-                        // height={48}
-                        fill
-                      />
-                    ))}
-                  </div> */}
               </div>
             );
-          }
-        )}
+          })}
+        </div>
       </PopUp.Body>
-      <PopUp.ButtonGroup loading={true}>
-        <Button variant="success" onClick={(e) => console.log(e)}>
+      <PopUp.ButtonGroup loading={isLoading}>
+        <Button variant="success" close>
           확인
         </Button>
         <Button variant="danger" close>

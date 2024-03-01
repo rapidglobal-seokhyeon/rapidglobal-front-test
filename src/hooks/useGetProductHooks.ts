@@ -4,33 +4,19 @@ import { usePageQuery } from "./usePageQuery";
 
 import { PRODUCT } from "@/constants/queryKey";
 import { useRouter } from "next/router";
+import { fetchUtils } from "@/utils/fetch";
 
-const fetchGetProduct = async (
-  queryParams: string
-): Promise<ProductOutputDto> => {
-  try {
-    const url = "http://localhost:3000/api" + queryParams;
-
-    const res = await fetch(url);
-    return await res.json();
-  } catch (error) {
-    console.error(error);
-    throw Error("api error");
-  }
-};
-
-const useProductFetcher = () => {
+const useGetProductHooks = () => {
   const { pageQueryParams } = usePageQuery();
   const router = useRouter();
 
-  return {
+  return useQuery<ProductOutputDto>({
     queryKey: [PRODUCT, pageQueryParams],
-    queryFn: () => fetchGetProduct(router.asPath.toString()),
-  };
+    queryFn: async () =>
+      await fetchUtils<ProductOutputDto>({
+        path: router.asPath.toString(),
+      }),
+  });
 };
 
-const useGetProductHooks = () => {
-  return useQuery<ProductOutputDto>(useProductFetcher());
-};
-
-export { fetchGetProduct, useGetProductHooks };
+export { useGetProductHooks };

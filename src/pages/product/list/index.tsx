@@ -3,10 +3,7 @@ import { Inter } from "next/font/google";
 
 import { QueryClient, dehydrate } from "@tanstack/react-query";
 import { GetStaticProps } from "next";
-import {
-  fetchGetProduct,
-  useGetProductHooks,
-} from "@/hooks/useGetProductHooks";
+import { useGetProductHooks } from "@/hooks/useGetProductHooks";
 
 import { useRouter } from "next/router";
 
@@ -14,19 +11,21 @@ import { Pagination } from "@/components/Pagination";
 import { Table } from "@/components/Table";
 import { Filter } from "@/components/Filter";
 import { PRODUCT } from "@/constants/queryKey";
-import { useState } from "react";
 
 import styles from "@/styles/Home.module.css";
 import { ProductListDetailPopUp } from "@/common/Modal/product/list";
+import { usePopUpStore } from "@/stores/popup";
+import { useState } from "react";
+import { fetchUtils } from "@/utils/fetch";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   const router = useRouter();
+  const { handleToggle } = usePopUpStore();
+  const [productId, setProductId] = useState<number>(-1);
 
-  const [id, setId] = useState<number | null>(null);
-
-  const { data, isPending, isFetching } = useGetProductHooks();
+  const { data, isPending, isLoading } = useGetProductHooks();
 
   if (isPending || !data) return <div>loading</div>;
 
@@ -48,7 +47,7 @@ export default function Home() {
           <div onClick={() => router.push("/")}>Home</div>
 
           <Filter
-            loading={isFetching}
+            loading={isLoading}
             filter={[
               { key: "productTitle", label: "상품 이름" },
               { key: "uploadedAt", label: "업로드일자" },
@@ -58,7 +57,10 @@ export default function Home() {
           />
 
           <Table
-            onClickRow={(_, id) => setId(id)}
+            onClickRow={(_, id) => {
+              setProductId((prev) => (prev = id));
+              handleToggle();
+            }}
             header={[
               { key: "title", label: "상품 이름" },
               { key: "uploadedAt", label: "업로드일자" },
@@ -71,7 +73,7 @@ export default function Home() {
         </section>
       </main>
 
-      <ProductListDetailPopUp data={product.filter((el) => el.id === id)} />
+      <ProductListDetailPopUp productId={productId} />
     </>
   );
 }
@@ -81,7 +83,10 @@ export const getStaticProps: GetStaticProps = async () => {
 
   await queryClient.prefetchQuery({
     queryKey: [PRODUCT],
-    queryFn: () => fetchGetProduct("/product/list?skip=1&take=10&sortList=[]"),
+    queryFn: async () =>
+      await fetchUtils({
+        path: "/product/list?skip=1&take=10&sortList=[]",
+      }),
   });
 
   return {

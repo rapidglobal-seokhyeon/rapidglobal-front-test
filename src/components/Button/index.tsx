@@ -21,7 +21,6 @@ export const Button = ({
   disabled,
   variant = "primary",
 }: ButtonProps) => {
-  console.log(variant);
   return (
     <button
       onClick={(e) => {

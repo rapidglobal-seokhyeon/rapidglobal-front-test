@@ -2,7 +2,7 @@ import { Product } from "@dto/product.model.dto";
 import { readFileSync } from "fs";
 import { NextApiRequest, NextApiResponse } from "next";
 
-type ResponseData = {
+export type ResponseData = {
   product: Product | null;
   success: boolean;
 };
@@ -17,6 +17,7 @@ export default async function GET(
   const dataList: Product[] = JSON.parse(dataStr);
 
   const product = dataList.find((product) => product.id === +id);
+
   if (!product) {
     res.status(404).json({
       success: false,
