@@ -6,10 +6,15 @@ import { makeQueryString } from "@/utils/querystring";
 import { useRouter } from "next/router";
 import { ChangeEvent, MouseEvent } from "react";
 
+import { clsx } from "clsx";
+
+import styles from "./Pagination.module.css";
+
 type PaginationChangeType = (
   type: "next" | "prev" | "pageSize" | "page"
 ) => (
-  e: ChangeEvent<HTMLSelectElement> & MouseEvent<HTMLButtonElement>
+  e: ChangeEvent<HTMLSelectElement> &
+    MouseEvent<HTMLLIElement & HTMLButtonElement>
 ) => void;
 
 interface PaginationProps {
@@ -57,38 +62,61 @@ export const Pagination = ({
     router.push(makeQueryString(payload, true), undefined, { shallow: true });
   };
 
+  const pageListFilter = makePageList.filter((value) => {
+    const currentPage = +pageQueryParams.skip;
+    const distance = Math.abs(currentPage - value);
+    return distance <= 5;
+  });
+
   return (
-    <div>
-      <span>총: {total}</span>
-      <span>page:{pageQueryParams.skip}</span>
+    <div className={styles.container}>
+      <p>총: {total}개</p>
 
-      <select
-        defaultValue={pageQueryParams.take}
-        onChange={handlePaginationChange("pageSize")}
-      >
-        {selectOptions.map((el) => (
-          <option key={el}>{el}</option>
-        ))}
-      </select>
+      <div className={styles.pageInfo}>
+        <p>
+          {makePageList.length} 중 {pageQueryParams.skip}페이지
+        </p>
 
-      <div>
-        {makePageList.map((page) => (
-          <span
-            key={page}
-            id={page.toString()}
-            onClick={handlePaginationChange("page")}
+        <select
+          defaultValue={pageQueryParams.take}
+          onChange={handlePaginationChange("pageSize")}
+        >
+          {selectOptions.map((el) => (
+            <option key={el}>{el}</option>
+          ))}
+        </select>
+
+        <nav className={styles.page_box}>
+          <button
+            className={styles.page}
+            disabled={!hasPrev}
+            onClick={handlePaginationChange("prev")}
           >
-            {page}
-          </span>
-        ))}
+            이전
+          </button>
+          <ul className={styles.page_box}>
+            {pageListFilter.map((page) => (
+              <li
+                key={page}
+                className={clsx(styles.page, {
+                  [styles.select]: page === +pageQueryParams.skip,
+                })}
+                id={page.toString()}
+                onClick={handlePaginationChange("page")}
+              >
+                {page}
+              </li>
+            ))}
+          </ul>
+          <button
+            className={styles.page}
+            disabled={!hasNext}
+            onClick={handlePaginationChange("next")}
+          >
+            다음
+          </button>
+        </nav>
       </div>
-
-      <button disabled={!hasPrev} onClick={handlePaginationChange("prev")}>
-        이전
-      </button>
-      <button disabled={!hasNext} onClick={handlePaginationChange("next")}>
-        다음
-      </button>
     </div>
   );
 };
