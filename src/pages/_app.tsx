@@ -8,6 +8,8 @@ import {
 } from "@tanstack/react-query";
 import type { AppProps } from "next/app";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import ErrorPage from "@/components/Error";
 
 export default function App({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(() => new QueryClient());
@@ -15,7 +17,9 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <HydrationBoundary state={pageProps.dehydrateState}>
-        <Component {...pageProps} />
+        <ErrorBoundary errorComponent={ErrorPage}>
+          <Component {...pageProps} />
+        </ErrorBoundary>
       </HydrationBoundary>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>

@@ -17,6 +17,7 @@ import { ProductListDetailPopUp } from "@/common/Modal/product/list";
 import { usePopUpStore } from "@/stores/popup";
 import { useState } from "react";
 import { fetchUtils } from "@/utils/fetch";
+import { Loading } from "@/components/Loading";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,7 +28,7 @@ export default function Home() {
 
   const { data, isPending, isLoading } = useGetProduct();
 
-  if (isPending || !data) return <div>loading</div>;
+  if (isPending || !data) return <Loading />;
 
   const { product, ...pageInfo } = data;
 

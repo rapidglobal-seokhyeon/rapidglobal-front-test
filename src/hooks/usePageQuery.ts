@@ -11,8 +11,16 @@ export const usePageQuery = () => {
   };
 
   for (const [key, value] of Array.from(searchParams.entries())) {
-    if (Object.hasOwn(pageQueryParams, key)) {
-      pageQueryParams[key] = value;
+    try {
+      if (Object.hasOwn(pageQueryParams, key)) {
+        if (!value || +value === 0) {
+          throw new Error("not found pageQuery");
+        }
+
+        pageQueryParams[key] = value;
+      }
+    } catch (error) {
+      console.error("pageQuery Error");
     }
   }
 

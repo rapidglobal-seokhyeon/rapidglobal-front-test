@@ -9,6 +9,7 @@ import { Img } from "@/components/Image";
 import { FormEvent, MouseEvent, useEffect, useRef, useState } from "react";
 import { usePostProductDetail } from "@/hooks/usePostProductDetail";
 import { usePopUpStore } from "@/stores/popup";
+import { Loading } from "@/components/Loading";
 
 interface ProductListDetailPopUpProps {
   productId: number;
@@ -32,7 +33,7 @@ export const ProductListDetailPopUp = ({
     }
   }, [isSuccess, open]);
 
-  if (!data || !data.product) return <div>loading...</div>;
+  if (!data || !data.product) return <Loading />;
 
   const { price, thumbnailUrls, title, uploadedAt, viewCount } = data.product;
 
