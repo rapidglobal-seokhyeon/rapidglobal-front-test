@@ -1,0 +1,35 @@
+.container {
+  border: 1px solid #ddd;
+  white-space: nowrap;
+  width: 100%;
+  border-collapse: collapse;
+  overflow: hidden;
+}
+
+.thead {
+  background-color: #ddd;
+}
+
+.thead tr > th {
+  font-size: 16px;
+  font-weight: 500;
+  padding: 4px 8px;
+}
+
+.tbody {
+  width: 100%;
+}
+
+.tbody > tr > td {
+  font-size: 14px;
+  text-align: center;
+
+  padding: 4px 12px;
+}
+
+.tbody tr:nth-child(2n) {
+  background-color: #ddd;
+}
+.tbody tr:nth-child(2n-1) {
+  background-color: #fff;
+}

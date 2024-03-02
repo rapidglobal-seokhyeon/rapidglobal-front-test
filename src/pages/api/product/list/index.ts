@@ -1,4 +1,4 @@
-import { Product } from "@dto/product.model.dto";
+import { Product, GetProductOutputDto } from "@dto/product.model.dto";
 import dayjs from "dayjs";
 import { readFileSync } from "fs";
 import type { NextApiRequest, NextApiResponse } from "next";
@@ -7,7 +7,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 export default function GET(
   req: NextApiRequest,
-  res: NextApiResponse<Product[]>
+  res: NextApiResponse<GetProductOutputDto>
 ) {
   const {
     skip: skipQuery = "0",
@@ -39,6 +39,9 @@ export default function GET(
     };
   });
 
+  const page = (skip - 1) * take;
+  const pageSize = page + take;
+
   const sortProductList = productList
     .toSorted((a, b) => {
       for (const sort of sortList) {
@@ -51,9 +54,14 @@ export default function GET(
         }
       }
     })
-    .slice(skip, skip + take);
+    .slice(page, pageSize);
 
-  res.status(200).json(sortProductList);
+  res.status(200).json({
+    product: sortProductList,
+    total: productList.length,
+    hasNext: pageSize < productList.length,
+    hasPrev: page !== 0,
+  });
 }
 
 function sortByPrice(a: Product, b: Product) {

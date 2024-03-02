@@ -2,11 +2,19 @@ import { Product } from "@dto/product.model.dto";
 import { readFileSync, writeFileSync } from "fs";
 import type { NextApiRequest, NextApiResponse } from "next";
 
-type Data = {
+export interface PostProductDetailOutputDto {
   success: boolean;
-};
+}
 
-export default function POST(req: NextApiRequest, res: NextApiResponse<Data>) {
+export interface PostProductDetailInputDto {
+  id: number;
+  title: string;
+}
+
+export default function POST(
+  req: NextApiRequest,
+  res: NextApiResponse<PostProductDetailOutputDto>
+) {
   const { id, title } = req.body;
 
   const dataStr = readFileSync("data.json", "utf-8");
