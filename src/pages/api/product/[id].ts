@@ -2,14 +2,14 @@ import { Product } from "@dto/product.model.dto";
 import { readFileSync } from "fs";
 import { NextApiRequest, NextApiResponse } from "next";
 
-export type ResponseData = {
+export type GetProductOutputDto = {
   product: Product | null;
   success: boolean;
 };
 
 export default async function GET(
   req: NextApiRequest,
-  res: NextApiResponse<ResponseData>
+  res: NextApiResponse<GetProductOutputDto>
 ) {
   const { id } = req.query as { id: string };
 

@@ -37,8 +37,8 @@
   /* 확대 이미지 스타일 */
   display: none;
   position: absolute;
-  top: 50%;
-  width: 50vw;
+  top: 25%;
+  width: 25vw;
   aspect-ratio: 1;
   border-radius: 8px;
   z-index: 99;

@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 
 import { QueryClient, dehydrate } from "@tanstack/react-query";
 import { GetStaticProps } from "next";
-import { useGetProductHooks } from "@/hooks/useGetProductHooks";
+import { useGetProduct } from "@/hooks/useGetProduct";
 
 import { useRouter } from "next/router";
 
@@ -25,7 +25,7 @@ export default function Home() {
   const { handleToggle } = usePopUpStore();
   const [productId, setProductId] = useState<number>(-1);
 
-  const { data, isPending, isLoading } = useGetProductHooks();
+  const { data, isPending, isLoading } = useGetProduct();
 
   if (isPending || !data) return <div>loading</div>;
 

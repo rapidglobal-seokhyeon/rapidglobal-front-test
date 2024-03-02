@@ -1,4 +1,4 @@
-import { Product, ProductOutputDto } from "@dto/product.model.dto";
+import { Product, GetProductOutputDto } from "@dto/product.model.dto";
 import dayjs from "dayjs";
 import { readFileSync } from "fs";
 import type { NextApiRequest, NextApiResponse } from "next";
@@ -7,7 +7,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 export default function GET(
   req: NextApiRequest,
-  res: NextApiResponse<ProductOutputDto>
+  res: NextApiResponse<GetProductOutputDto>
 ) {
   const {
     skip: skipQuery = "0",

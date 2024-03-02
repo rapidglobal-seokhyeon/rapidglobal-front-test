@@ -16,15 +16,9 @@ export interface Product {
   thumbnailUrls: string[];
 }
 
-export interface ProductOutputDto {
+export interface GetProductOutputDto {
   product: Product[];
   total: number;
   hasNext: boolean;
   hasPrev: boolean;
-}
-
-export interface ProductQueryInputDto {
-  skip: number;
-  take: number;
-  sortList: SortListType[];
 }
