@@ -11,6 +11,7 @@ export const productTableHeader = [
 export type TableDataKeyValue = {
   key: keyof ProductOmitType<"thumbnailUrls">;
   label: (typeof productTableHeader)[number];
+  width: string;
 };
 
 export type TableSortTypeKeyValue = {

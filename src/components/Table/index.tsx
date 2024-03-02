@@ -2,6 +2,8 @@ import { TableDataKeyValue } from "@/types";
 import { Product } from "@dto/product.model.dto";
 import { MouseEvent } from "react";
 
+import styles from "./Table.module.css";
+
 interface TableProps {
   header: Array<TableDataKeyValue>;
   body: Product[];
@@ -10,15 +12,17 @@ interface TableProps {
 
 export const Table = ({ header, body, onClickRow }: TableProps) => {
   return (
-    <table>
-      <thead>
+    <table className={styles.container}>
+      <thead className={styles.thead}>
         <tr>
-          {header.map(({ key, label }) => (
-            <th key={key}>{label}</th>
+          {header.map(({ key, label, width }) => (
+            <th key={key} style={{ width }}>
+              {label}
+            </th>
           ))}
         </tr>
       </thead>
-      <tbody>
+      <tbody className={styles.tbody}>
         {body.map(({ id, price, title, uploadedAt, viewCount }) => (
           <tr key={id} onClick={(e) => onClickRow && onClickRow(e, id)}>
             <td>{title}</td>

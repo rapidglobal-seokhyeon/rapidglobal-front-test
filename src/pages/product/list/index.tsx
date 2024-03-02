@@ -18,6 +18,8 @@ import { usePopUpStore } from "@/stores/popup";
 import { useState } from "react";
 import { fetchUtils } from "@/utils/fetch";
 import { Loading } from "@/components/Loading";
+import Link from "next/link";
+import { Button } from "@/components/Button";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -45,32 +47,36 @@ export default function Home() {
       ${inter.className}`}
       >
         <section>
-          <div onClick={() => router.push("/")}>Home</div>
+          <Button variant="primary">
+            <Link href={"/"}>홈으로</Link>
+          </Button>
 
-          <Filter
-            loading={isLoading}
-            filter={[
-              { key: "productTitle", label: "상품 이름" },
-              { key: "uploadedAt", label: "업로드일자" },
-              { key: "price", label: "상품 가격" },
-              { key: "viewCount", label: "조회수" },
-            ]}
-          />
+          <div className={styles.table}>
+            <Filter
+              loading={isLoading}
+              filter={[
+                { key: "productTitle", label: "상품 이름" },
+                { key: "uploadedAt", label: "업로드일자" },
+                { key: "price", label: "상품 가격" },
+                { key: "viewCount", label: "조회수" },
+              ]}
+            />
 
-          <Table
-            onClickRow={(_, id) => {
-              setProductId((prev) => (prev = id));
-              handleToggle();
-            }}
-            header={[
-              { key: "title", label: "상품 이름" },
-              { key: "uploadedAt", label: "업로드일자" },
-              { key: "price", label: "상품 가격" },
-              { key: "viewCount", label: "조회수" },
-            ]}
-            body={product}
-          />
-          <Pagination {...pageInfo} />
+            <Table
+              onClickRow={(_, id) => {
+                setProductId((prev) => (prev = id));
+                handleToggle();
+              }}
+              header={[
+                { key: "title", label: "상품 이름", width: "30%" },
+                { key: "uploadedAt", label: "업로드일자", width: "20%" },
+                { key: "price", label: "상품 가격", width: "35%" },
+                { key: "viewCount", label: "조회수", width: "15%" },
+              ]}
+              body={product}
+            />
+            <Pagination {...pageInfo} />
+          </div>
         </section>
       </main>
 
