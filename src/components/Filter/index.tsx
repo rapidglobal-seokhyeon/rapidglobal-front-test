@@ -74,13 +74,21 @@ export const Filter = ({ filter, loading }: FilterProps) => {
     );
   };
 
+  const handleFilterReset = () => {
+    const payload = {
+      ...pageQueryParams,
+      sortList: "[]",
+    };
+    router.push(makeQueryString(payload), undefined, { shallow: true });
+  };
+
   return (
     <div className={styles.filter_container}>
       {initFilterMemo.map(({ key, label, sortType }) => {
         return (
           <div
-            className={styles.filter_box}
             key={key}
+            className={styles.filter_box}
             onClick={onClick(key, sortType)}
           >
             <p
@@ -102,16 +110,7 @@ export const Filter = ({ filter, loading }: FilterProps) => {
         );
       })}
 
-      <button
-        className={styles.filter_btn}
-        onClick={() => {
-          const payload = {
-            ...pageQueryParams,
-            sortList: "[]",
-          };
-          router.push(makeQueryString(payload), undefined, { shallow: true });
-        }}
-      >
+      <button className={styles.filter_btn} onClick={handleFilterReset}>
         <p className={styles.filter_text}>초기화</p>
       </button>
     </div>
