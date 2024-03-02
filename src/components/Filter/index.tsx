@@ -6,6 +6,14 @@ import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 import { useMemo } from "react";
 
+import { clsx } from "clsx";
+
+import arrow_asc from "@icons/arrow-up.svg";
+import arrow_desc from "@icons/arrow-down.svg";
+
+import styles from "./Filter.module.css";
+import Image from "next/image";
+
 interface FilterProps {
   filter: FilterListType[];
   loading: boolean;
@@ -67,20 +75,35 @@ export const Filter = ({ filter, loading }: FilterProps) => {
   };
 
   return (
-    <div>
+    <div className={styles.filter_container}>
       {initFilterMemo.map(({ key, label, sortType }) => {
         return (
-          <div key={key}>
-            <p>{label}</p>
-            <button disabled={loading} onClick={onClick(key, sortType)}>
-              {sortType === "asc" && <span id={sortType}>오름차순</span>}
-              {sortType === "desc" && <span id={sortType}>내림차순</span>}
+          <div
+            className={styles.filter_box}
+            key={key}
+            onClick={onClick(key, sortType)}
+          >
+            <p
+              className={clsx(styles.filter_text, {
+                [styles.select]: sortType === "desc",
+              })}
+            >
+              {label}
+            </p>
+            <button className={styles.filter_btn} disabled={loading}>
+              {sortType === "asc" && (
+                <Image src={arrow_asc} width={12} height={12} alt="오름차순" />
+              )}
+              {sortType === "desc" && (
+                <Image src={arrow_desc} width={12} height={12} alt="내림차순" />
+              )}
             </button>
           </div>
         );
       })}
 
       <button
+        className={styles.filter_btn}
         onClick={() => {
           const payload = {
             ...pageQueryParams,
@@ -89,7 +112,7 @@ export const Filter = ({ filter, loading }: FilterProps) => {
           router.push(makeQueryString(payload), undefined, { shallow: true });
         }}
       >
-        초기화
+        <p className={styles.filter_text}>초기화</p>
       </button>
     </div>
   );
